@@ -2,7 +2,7 @@
 
 ## 目的
 
-- `send-attendance-plan` が送信したメール（本文に `set,YYYY/MM/DD,label` / `delete,YYYY/MM/DD` を含む）を Gmail で受信し
+- 決められたフォーマット（本文に `set,YYYY/MM/DD,label` / `delete,YYYY/MM/DD` を含む）のメールを Gmail で受信し
 - Google Apps Script（GAS）を定期実行して **未開封メール** を対象に本文をパースし
 - Google カレンダーへ反映する
 
