@@ -1,0 +1,24 @@
+{
+  "name": "import-attendance-plan",
+  "version": "1.0.0",
+  "description": "- [決められたフォーマット](#メール本文フォーマット)（本文に `set,YYYY/MM/DD,label` や `delete,YYYY/MM/DD` を含む形式）のメールを Gmail で受信し\r - Google Apps Script（GAS）を定期実行して **未開封メール** を対象に本文をパースし\r - Google カレンダーへ反映する",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asabon/import-attendance-plan.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/asabon/import-attendance-plan/issues"
+  },
+  "homepage": "https://github.com/asabon/import-attendance-plan#readme",
+  "devDependencies": {
+    "jest": "^30.4.2"
+  }
+}
