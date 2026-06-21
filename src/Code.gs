@@ -46,9 +46,9 @@ function showVersion() {
 
 function debugParseSample() {
   var sample = [
-    'set,2026/05/11,厚木出社',
+    'set,2026/05/11,拠点A出社',
     'delete,2026/05/12',
-    'set,2026/05/15,大崎出社'
+    'set,2026/05/15,拠点B出社'
   ].join('\n');
 
   var ops = parseAttendanceMailBody_(sample);
