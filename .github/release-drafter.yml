@@ -1,0 +1,51 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+categories:
+  - title: '🚀 Features (新機能)'
+    labels:
+      - 'enhancement'
+      - 'feature'
+      - 'feat'
+  - title: '🐛 Bug Fixes (バグ修正)'
+    labels:
+      - 'bug'
+      - 'fix'
+  - title: '📝 Documentation (ドキュメント更新)'
+    labels:
+      - 'documentation'
+      - 'docs'
+  - title: '🔧 Maintenance (メンテナンス・構成変更)'
+    labels:
+      - 'chore'
+      - 'build'
+      - 'ci'
+      - 'refactor'
+change-template: '- $TITLE (#$NUMBER) @$AUTHOR'
+change-title-escapes: '\<*_&'
+template: |
+  ## 何が変わったか (What's Changed)
+
+  $CHANGES
+
+  **Full Changelog**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
+
+version-resolver:
+  major:
+    labels:
+      - 'major'
+  minor:
+    labels:
+      - 'enhancement'
+      - 'feature'
+      - 'feat'
+  patch:
+    labels:
+      - 'bug'
+      - 'fix'
+      - 'documentation'
+      - 'docs'
+      - 'refactor'
+      - 'chore'
+      - 'build'
+      - 'ci'
+  default: patch
