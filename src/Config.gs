@@ -1,5 +1,7 @@
-// import-attendance-plan
-// Version: 0.1.0
+/**
+ * @file Config.gs
+ * @description スクリプトプロパティから設定値を取得・検証し、オブジェクトとして提供します。
+ */
 
 function getConfig_() {
   var props = PropertiesService.getScriptProperties();

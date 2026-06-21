@@ -1,5 +1,7 @@
-// import-attendance-plan
-// Version: 0.1.0
+/**
+ * @file Code.gs
+ * @description 処理のエントリーポイント。Gmailから未読の出社予定メールを検索し、パースしてGoogleカレンダーへ反映します。
+ */
 
 function runImport() {
   Logger.log('import-attendance-plan version=%s', IMPORT_ATTENDANCE_PLAN_VERSION);
