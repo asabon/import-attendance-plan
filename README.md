@@ -54,23 +54,29 @@ npx clasp create --type standalone --title "import-attendance-plan"
 npx clasp push
 ```
 
-### 4) バージョンアップデート時の反映方法
+---
 
-最新のリリースコードを Google Apps Script に反映し、新しいバージョンをデプロイするには以下のコマンドを実行します。
+## アップデート手順（clasp）
+
+GitHub上で新しいリリース公開（タグ生成）を行った後、最新リリースを Google Apps Script に安全に反映し、バージョンデプロイを行うには、以下の自動デプロイコマンドを使用します。
 
 ```bash
-# 1. 最新のソースコードをローカルに取得
+# 1. リモートから最新のコードおよび Git タグを取得
+git fetch
 git pull
 
-# 2. 最新コードを GAS にプッシュ (差分を強制同期する場合は --force を指定)
-npx clasp push --force
+# 2. リリース対象のバージョン（Git タグ）にチェックアウト
+# 例: v0.1.0 をデプロイしたい場合
+git checkout v0.1.0
 
-# 3. 新しいスクリプトバージョンを作成 (例: v0.2.0)
-npx clasp version "v0.2.0"
+# 3. 自動デプロイコマンドを実行
+npm run deploy
 
-# 4. 作成されたバージョン番号（上のコマンド出力に表示されます）を指定してデプロイ
-npx clasp deploy --versionNumber <バージョン番号> --description "v0.2.0"
+# 4. デプロイ完了後、作業ブランチ（main）に戻る
+git checkout main
 ```
+
+*(※自動デプロイスクリプト `npm run deploy` は、現在のコミットに正しいリリース用の Git タグが打たれており、かつ `src/Version.gs` のバージョン定義と一致している場合のみ安全にプッシュおよびデプロイを実行します。)*
 
 ---
 
