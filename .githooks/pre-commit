@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Get the name of the current branch
+branch="$(git symbolic-ref --short HEAD)"
+
+if [ "$branch" = "main" ]; then
+  echo "================================================================="
+  echo "Error: Direct commits to the 'main' branch are not allowed!"
+  echo "Please create a feature branch and work there."
+  echo "Example:"
+  echo "  git checkout -b issue-<issue_number>-<description>"
+  echo "================================================================="
+  exit 1
+fi
