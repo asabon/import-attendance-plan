@@ -1,5 +1,7 @@
-// import-attendance-plan
-// Version: 0.1.0
+/**
+ * @file Calendar.gs
+ * @description Googleカレンダーのイベント操作（登録・削除・既存イベントのクリーニング）を担当する処理。
+ */
 
 /**
  * 解析された操作（登録・削除）を Google カレンダーへ適用します。

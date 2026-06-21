@@ -1,5 +1,7 @@
-// import-attendance-plan
-// Version: 0.1.0
+/**
+ * @file Parser.gs
+ * @description Gmailのメール本文（CSV風の指示）のパース、重複排除、および日付フォーマット検証などの処理。
+ */
 
 /**
  * メール本文をパースし、登録・削除の操作配列を返します。

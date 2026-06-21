@@ -1,6 +1,8 @@
-// import-attendance-plan
+/**
+ * @file Version.gs
+ * @description プロジェクト全体のバージョン情報を定義するファイル。
+ */
+
 // Version: 0.1.0
-//
-// このファイルの値を、他の .gs のヘッダーコメントにも反映してください。
 
 var IMPORT_ATTENDANCE_PLAN_VERSION = '0.1.0';
