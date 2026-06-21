@@ -23,24 +23,53 @@
 
 ### 1) clasp の準備
 
-- `clasp` をインストール（例: `npm i -g @google/clasp`）
-- `clasp login` でログイン
+本リポジトリには `clasp` が開発用依存関係として含まれています。ローカルにインストールして使用することをおすすめします。
+
+```bash
+# 依存関係のインストール (初回のみ)
+npm install
+
+# Googleアカウントへのログイン
+npx clasp login
+```
+
+*(※グローバルにインストールして使用したい場合は `npm i -g @google/clasp` を実行し、以降のコマンドは `npx` なしで実行してください。)*
 
 ### 2) Apps Script プロジェクト作成
 
-このディレクトリで以下を実行:
+このディレクトリで以下を実行してプロジェクトを作成します。
 
 ```bash
-cd import-attendance-plan
-clasp create --type standalone --title "import-attendance-plan"
+# ※既存のGASプロジェクトがある場合は、 `npx clasp clone <Script-ID>` でクローンすることも可能です
+# （その場合は自動生成された .clasp.json の rootDir を "src" に手動で修正してください）
+npx clasp create --type standalone --title "import-attendance-plan"
 ```
 
-- 生成される `.clasp.json` は環境依存なので Git 管理しません（`.gitignore` 済み）
+- 生成される `.clasp.json` は環境依存であるため Git 管理から除外されています（`.gitignore` 済み）
+- 設定のサンプルとして [`.clasp.json.sample`](.clasp.json.sample) が同梱されています
 
 ### 3) Push
 
 ```bash
-clasp push
+npx clasp push
+```
+
+### 4) バージョンアップデート時の反映方法
+
+最新のリリースコードを Google Apps Script に反映し、新しいバージョンをデプロイするには以下のコマンドを実行します。
+
+```bash
+# 1. 最新のソースコードをローカルに取得
+git pull
+
+# 2. 最新コードを GAS にプッシュ (差分を強制同期する場合は --force を指定)
+npx clasp push --force
+
+# 3. 新しいスクリプトバージョンを作成 (例: v0.2.0)
+npx clasp version "v0.2.0"
+
+# 4. 作成されたバージョン番号（上のコマンド出力に表示されます）を指定してデプロイ
+npx clasp deploy --versionNumber <バージョン番号> --description "v0.2.0"
 ```
 
 ---
