@@ -4,7 +4,8 @@
   "description": "- [決められたフォーマット](#メール本文フォーマット)（本文に `set,YYYY/MM/DD,label` や `delete,YYYY/MM/DD` を含む形式）のメールを Gmail で受信し\r - Google Apps Script（GAS）を定期実行して **未開封メール** を対象に本文をパースし\r - Google カレンダーへ反映する",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "deploy": "node scripts/deploy.js"
   },
   "repository": {
     "type": "git",
