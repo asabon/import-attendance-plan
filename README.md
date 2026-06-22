@@ -1,3 +1,5 @@
+[![Run Tests](https://github.com/asabon/import-attendance-plan/actions/workflows/test.yml/badge.svg?branch=main&event=push)](https://github.com/asabon/import-attendance-plan/actions/workflows/test.yml)
+
 # import-attendance-plan
 
 ## 目的
