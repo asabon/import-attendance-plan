@@ -43,10 +43,18 @@ function getConfig_() {
     throw new Error('ATTENDANCE_MANAGED_TITLES が空です');
   }
 
+  var logSheetId = props.getProperty('ATTENDANCE_LOG_SHEET_ID') || '';
+  var errorNotifyEmail = props.getProperty('ATTENDANCE_ERROR_NOTIFY_EMAIL') || '';
+  var apiToken = props.getProperty('ATTENDANCE_API_TOKEN') || '';
+
   return {
     mailSubject: mailSubject,
     gmailQuery: gmailQuery,
     calendarId: calendarId,
-    managedTitles: managedTitles
+    managedTitles: managedTitles,
+    logSheetId: logSheetId,
+    errorNotifyEmail: errorNotifyEmail,
+    apiToken: apiToken
   };
 }
+

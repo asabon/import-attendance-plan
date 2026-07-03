@@ -15,6 +15,8 @@ function runImport() {
   var threads = GmailApp.search(config.gmailQuery, 0, 50);
   Logger.log('threads=%s query=%s', threads.length, config.gmailQuery);
 
+  var results = [];
+
   for (var t = 0; t < threads.length; t++) {
     var thread = threads[t];
     var messages = thread.getMessages();
@@ -31,14 +33,51 @@ function runImport() {
         continue;
       }
 
+      var from = msg.getFrom();
+      var date = msg.getDate();
+      var messageId = msg.getId();
       var body = msg.getPlainBody();
-      var ops = parseAttendanceMailBody_(body);
 
-      applyOpsToCalendar_(calendar, ops, config.managedTitles);
+      var result = {
+        messageId: messageId,
+        date: date,
+        from: from,
+        subject: subject,
+        body: body,
+        success: false,
+        errorMsg: ''
+      };
 
-      msg.markRead();
-      Logger.log('imported: %s (%s ops)', subject, ops.length);
+      try {
+        var ops = parseAttendanceMailBody_(body);
+        applyOpsToCalendar_(calendar, ops, config.managedTitles);
+
+        msg.markRead();
+        result.success = true;
+        Logger.log('imported: %s (%s ops)', subject, ops.length);
+      } catch (e) {
+        result.success = false;
+        result.errorMsg = e.message || String(e);
+
+        console.error(JSON.stringify({
+          message: 'Error processing mail: ' + result.errorMsg,
+          messageId: messageId,
+          from: from,
+          subject: subject,
+          date: date.toISOString(),
+          errorStack: e.stack || ''
+        }));
+
+        msg.markRead();
+        msg.star();
+      }
+
+      results.push(result);
     }
+  }
+
+  if (results.length > 0) {
+    writeLogsAndNotify_(results, config);
   }
 }
 

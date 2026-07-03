@@ -21,6 +21,8 @@
 - `Config.gs` ← [src/Config.gs](src/Config.gs) の内容をコピーして貼り付け
 - `Parser.gs` ← [src/Parser.gs](src/Parser.gs) の内容をコピーして貼り付け
 - `Calendar.gs` ← [src/Calendar.gs](src/Calendar.gs) の内容をコピーして貼り付け
+- `Logger.gs` ← [src/Logger.gs](src/Logger.gs) の内容をコピーして貼り付け
+- `Api.gs` ← [src/Api.gs](src/Api.gs) の内容をコピーして貼り付け
 - `Version.gs` ← [src/Version.gs](src/Version.gs) の内容をコピーして貼り付け
 
 マニフェスト（`appsscript.json`）も反映します。
@@ -29,13 +31,27 @@
 2. 「『appsscript.json』マニフェスト ファイルをエディタで表示する」をオンにします。
 3. エディタ（コードアイコン）に戻り、追加された `appsscript.json` の内容を [src/appsscript.json](src/appsscript.json) の内容で全て置き換えます。
 
-### 3) スクリプトプロパティ（環境変数）の設定
+### 3) ウェブアプリ (Web API) のデプロイ
+
+AIがエラー情報を自動取得できるようにするため、Webアプリ（Web API）として公開する必要があります。
+
+1. GASエディタの画面右上にある「デプロイ」→「新しいデプロイ」をクリックします。
+2. 「種類の選択」の歯車アイコンから「ウェブアプリ」を選択します。
+3. 以下の通り設定します：
+   - **説明**: `API for get-errors`（任意）
+   - **ウェブアプリを実行**: `自分`
+   - **アクセスできるユーザー**: `全員`（※APIトークン認証で保護するため「全員」を選択する必要があります）
+4. 「デプロイ」をクリックし、画面の指示に従ってアクセス承認します。
+5. デプロイ完了画面に表示される **「ウェブアプリのURL」** をコピーして控えておきます。
+   （例: `https://script.google.com/macros/s/XXXXX/exec`）
+
+### 4) スクリプトプロパティ（環境変数）の設定
 
 Apps Script エディタで「プロジェクトの設定」→「スクリプト プロパティ」に移動し、必要な設定値を追加します。
 
 *   設定プロパティの詳細については、[README.md の設定（Script Properties）セクション](README.md#設定script-properties) を参照してください。
 
-### 4) 初回実行とアクセス承認
+### 5) 初回実行とアクセス承認
 
 1. エディタ上部の実行対象の関数として `runImport` を選択します。
 2. 「実行」ボタンをクリックします。
