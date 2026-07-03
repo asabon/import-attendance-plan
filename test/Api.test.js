@@ -51,9 +51,10 @@ describe('Api.gs', () => {
 
     // ログデータ（ヘッダーとデータ1行）
     // 0:実行日時, 1:メール受信日時, 2:送信元, 3:件名, 4:結果, 5:エラー内容, 6:Message-ID
+    const runDateObj = new Date('2026-07-04T05:10:00Z');
     const logData = [
       ['実行日時', 'メール受信日時', '送信元', '件名', '結果', 'エラー内容', 'Message-ID'],
-      [new Date(), new Date(), 'user@example.com', '出社予定', 'エラー', 'パースエラー詳細', 'msg-1']
+      [runDateObj, new Date(), 'user@example.com', '出社予定', 'エラー', 'パースエラー詳細', 'msg-1']
     ];
 
     mockSheet = {
@@ -110,7 +111,8 @@ describe('Api.gs', () => {
     expect(data.errors).toHaveLength(1);
     expect(data.errors[0]).toEqual({
       messageId: 'msg-1',
-      date: '2026-07-04T05:00:00.000Z',
+      mailDate: '2026-07-04T05:00:00.000Z',
+      runDate: '2026-07-04T05:10:00.000Z',
       from: 'user@example.com',
       subject: '出社予定',
       errorMsg: 'パースエラー詳細',

@@ -38,12 +38,16 @@ function doGet(e) {
       // ヘッダー: 0:実行日時, 1:メール受信日時, 2:送信元, 3:件名, 4:結果, 5:エラー内容, 6:Message-ID
       for (var i = 1; i < data.length; i++) {
         var row = data[i];
+        var runTime = row[0];
         var msgId = row[6];
         var result = row[4];
         var errMsg = row[5];
         if (msgId && result === 'エラー') {
           // 重複時は上書きし、最新のものを保持
-          logMap[msgId] = errMsg;
+          logMap[msgId] = {
+            errMsg: errMsg,
+            runTime: runTime instanceof Date ? runTime.toISOString() : String(runTime)
+          };
         }
       }
     } catch (err) {
@@ -57,13 +61,14 @@ function doGet(e) {
       var msg = messages[m];
       if (msg.isStarred()) {
         var messageId = msg.getId();
-        var errMsg = logMap[messageId] || 'エラー詳細がログシートから見つかりませんでした。';
+        var logInfo = logMap[messageId] || { errMsg: 'エラー詳細がログシートから見つかりませんでした。', runTime: '' };
         activeErrors.push({
           messageId: messageId,
-          date: msg.getDate().toISOString(),
+          mailDate: msg.getDate().toISOString(),
+          runDate: logInfo.runTime,
           from: msg.getFrom(),
           subject: msg.getSubject(),
-          errorMsg: errMsg,
+          errorMsg: logInfo.errMsg,
           body: msg.getPlainBody()
         });
       }
