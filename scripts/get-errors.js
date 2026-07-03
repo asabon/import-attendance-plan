@@ -48,9 +48,14 @@ if (!fs.existsSync(logsDir)) {
  * @param {function} callback - コールバック関数 (error, data)
  */
 function fetchUrl(url, callback) {
-  https.get(url, (res) => {
+  console.log(`[DEBUG] 接続中: ${url.substring(0, 120)}...`);
+  
+  const req = https.get(url, (res) => {
+    console.log(`[DEBUG] ステータス: ${res.statusCode}`);
+    
     // 301, 302, 303, 307, 308 などのリダイレクトに対応
     if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+      console.log(`[DEBUG] リダイレクト先: ${res.headers.location.substring(0, 120)}...`);
       fetchUrl(res.headers.location, callback);
       return;
     }
@@ -62,8 +67,19 @@ function fetchUrl(url, callback) {
 
     let rawData = '';
     res.on('data', (chunk) => { rawData += chunk; });
-    res.on('end', () => { callback(null, rawData); });
-  }).on('error', (err) => {
+    res.on('end', () => { 
+      console.log(`[DEBUG] データ受信完了 (${rawData.length} バイト)`);
+      callback(null, rawData); 
+    });
+  });
+
+  // 15秒のタイムアウトを設定
+  req.setTimeout(15000, () => {
+    req.destroy();
+    callback(new Error('接続タイムアウト（15秒経過）'));
+  });
+
+  req.on('error', (err) => {
     callback(err);
   });
 }
