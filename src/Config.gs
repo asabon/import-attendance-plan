@@ -19,7 +19,7 @@ function getConfig_() {
   }
 
   if (!gmailQuery) {
-    gmailQuery = 'is:unread subject:"' + mailSubject.replace(/"/g, '\\"') + '"';
+    gmailQuery = 'label:inbox subject:"' + mailSubject.replace(/"/g, '\\"') + '"';
     if (maxAgeDays) {
       gmailQuery += ' newer_than:' + maxAgeDays + 'd';
     }

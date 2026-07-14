@@ -68,7 +68,8 @@ describe('Code.gs', () => {
 
     mockThreads = [
       {
-        getMessages: jest.fn().mockReturnValue(mockMessages)
+        getMessages: jest.fn().mockReturnValue(mockMessages),
+        moveToArchive: jest.fn()
       }
     ];
 
@@ -78,7 +79,11 @@ describe('Code.gs', () => {
 
     // スプレッドシートのモック
     mockSheet = {
-      appendRow: jest.fn()
+      appendRow: jest.fn(),
+      getLastRow: jest.fn().mockReturnValue(1),
+      getRange: jest.fn().mockReturnValue({
+        getValues: jest.fn().mockReturnValue([])
+      })
     };
     mockSpreadsheet = {
       getSheets: jest.fn().mockReturnValue([mockSheet])
@@ -153,5 +158,41 @@ describe('Code.gs', () => {
       '【エラー発生】出社予定登録処理',
       expect.stringContaining('invalid command,2026/05/11')
     );
+
+    // アーカイブ処理の検証
+    expect(mockThreads[0].moveToArchive).toHaveBeenCalled();
+  });
+
+  it('should skip messages that have already been processed (exists in log sheet)', () => {
+    // 既に 'msg-error' が処理済み（ログシートに存在）であるようにモックを設定
+    mockSheet.getLastRow.mockReturnValue(3);
+    mockSheet.getRange.mockReturnValue({
+      getValues: jest.fn().mockReturnValue([
+        ['msg-error'],
+        ['msg-already-done']
+      ])
+    });
+
+    gas.runImport();
+
+    // 1通目（エラー、既に処理済み）の検証：処理がスキップされ、既読化やエラー処理が呼ばれないこと
+    expect(mockMessages[0].markRead).not.toHaveBeenCalled();
+    expect(mockMessages[0].star).not.toHaveBeenCalled();
+
+    // 2通目（正常、未処理）の検証：正常に処理（カレンダー追加、既読化）されること
+    expect(mockMessages[1].markRead).toHaveBeenCalled();
+    expect(mockCalendar.createAllDayEvent).toHaveBeenCalledWith('拠点A出社', expect.any(Date));
+
+    // ログ記録の検証：2通目のみがスプレッドシートへ追記されること
+    expect(mockSheet.appendRow).toHaveBeenCalledTimes(1);
+    expect(mockSheet.appendRow).toHaveBeenCalledWith([
+      expect.any(Date),
+      mockMessages[1].getDate(),
+      'user2@example.com',
+      '出社予定',
+      '成功',
+      '',
+      'msg-success'
+    ]);
   });
 });

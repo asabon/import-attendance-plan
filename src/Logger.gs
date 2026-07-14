@@ -118,3 +118,39 @@ function sendErrorNotification_(results, config) {
     console.error('エラー通知メールの送信中にエラーが発生しました: ' + (e.stack || e.message || String(e)));
   }
 }
+
+/**
+ * ログ記録用スプレッドシートから、既に処理されたメッセージのID一覧を取得します。
+ * 
+ * @param {Object} config - 設定情報オブジェクト
+ * @returns {Object} 既処理メッセージIDをキー、値を true としたマップオブジェクト
+ */
+function getProcessedMessageIds_(config) {
+  var ids = {};
+  var sheetId = config.logSheetId;
+  if (!sheetId) {
+    return ids;
+  }
+
+  try {
+    var ss = SpreadsheetApp.openById(sheetId);
+    var sheet = ss.getSheets()[0];
+    var lastRow = sheet.getLastRow();
+    if (lastRow <= 1) {
+      return ids;
+    }
+    // Message-ID は7列目 (G列)
+    var range = sheet.getRange(2, 7, lastRow - 1, 1);
+    var values = range.getValues();
+    for (var i = 0; i < values.length; i++) {
+      var id = values[i][0];
+      if (id) {
+        ids[id] = true;
+      }
+    }
+  } catch (e) {
+    console.error('既処理Message-IDの取得中にエラーが発生しました: ' + (e.stack || e.message || String(e)));
+  }
+
+  return ids;
+}
