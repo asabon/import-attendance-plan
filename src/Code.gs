@@ -15,6 +15,7 @@ function runImport() {
   var threads = GmailApp.search(config.gmailQuery, 0, 50);
   Logger.log('threads=%s query=%s', threads.length, config.gmailQuery);
 
+  var processedIds = getProcessedMessageIds_(config);
   var results = [];
 
   for (var t = 0; t < threads.length; t++) {
@@ -23,7 +24,8 @@ function runImport() {
 
     for (var m = 0; m < messages.length; m++) {
       var msg = messages[m];
-      if (!msg.isUnread()) {
+      var messageId = msg.getId();
+      if (processedIds[messageId]) {
         continue;
       }
 
@@ -35,7 +37,6 @@ function runImport() {
 
       var from = msg.getFrom();
       var date = msg.getDate();
-      var messageId = msg.getId();
       var body = msg.getPlainBody();
 
       var result = {
@@ -74,6 +75,7 @@ function runImport() {
 
       results.push(result);
     }
+    thread.moveToArchive();
   }
 
   if (results.length > 0) {
