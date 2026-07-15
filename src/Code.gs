@@ -13,6 +13,8 @@ function runImport() {
   }
 
   var threads = GmailApp.search(config.gmailQuery, 0, 50);
+  // 古いメール（スレッド）から順に処理するため、配列を逆順にします
+  threads.reverse();
   Logger.log('threads=%s query=%s', threads.length, config.gmailQuery);
 
   var processedIds = getProcessedMessageIds_(config);
