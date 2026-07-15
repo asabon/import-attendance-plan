@@ -195,4 +195,27 @@ describe('Code.gs', () => {
       'msg-success'
     ]);
   });
+
+  it('should process threads in reverse order (oldest thread first)', () => {
+    // 2つのスレッドを用意。GmailApp.search は [最新, 古い] の順で返すため、
+    // モックの配列は [ThreadNewest, ThreadOldest] とする。
+    const threadNewest = {
+      getMessages: jest.fn().mockReturnValue([]),
+      moveToArchive: jest.fn()
+    };
+    const threadOldest = {
+      getMessages: jest.fn().mockReturnValue([]),
+      moveToArchive: jest.fn()
+    };
+
+    mockGmailApp.search.mockReturnValue([threadNewest, threadOldest]);
+
+    gas.runImport();
+
+    // threadOldest の getMessages が threadNewest の getMessages より先に呼び出されていることを検証する
+    const newestCallOrder = threadNewest.getMessages.mock.invocationCallOrder[0];
+    const oldestCallOrder = threadOldest.getMessages.mock.invocationCallOrder[0];
+
+    expect(oldestCallOrder).toBeLessThan(newestCallOrder);
+  });
 });
